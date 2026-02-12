@@ -117,7 +117,7 @@
 <body>
     <div class="container">
         <h1>📁 File Server</h1>
-        <p class="subtitle">Upload your files securely</p>
+        <p class="subtitle" id="subtitle">Upload your files securely</p>
         
         <form action="/upload" method="POST" enctype="multipart/form-data" id="uploadForm">
             <div class="upload-area" onclick="document.getElementById('fileInput').click()">
@@ -136,6 +136,17 @@
     </div>
 
     <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('success') === 'true') {
+            document.getElementById('subtitle').textContent = '✅ File uploaded successfully!';
+            document.getElementById('subtitle').style.color = '#6366f1';
+            setTimeout(() => {
+                window.history.replaceState({}, '', '/');
+                document.getElementById('subtitle').textContent = 'Upload your files securely';
+                document.getElementById('subtitle').style.color = '#a0a0b0';
+            }, 3000);
+        }
+        
         document.getElementById('fileInput').addEventListener('change', function(e) {
             const fileName = e.target.files[0]?.name || '';
             document.getElementById('fileName').textContent = fileName ? `Selected: ${fileName}` : '';

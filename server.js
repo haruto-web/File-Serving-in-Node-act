@@ -55,8 +55,8 @@ const server = http.createServer((req, res) => {
                         res.writeHead(500, { 'Content-Type': 'text/html' });
                         res.end('<h1>Error uploading file</h1><a href="/">Go back</a>');
                     } else {
-                        res.writeHead(200, { 'Content-Type': 'text/html' });
-                        res.end('<h1>File uploaded successfully!</h1><a href="/">Upload another</a>');
+                        res.writeHead(302, { 'Location': '/?success=true' });
+                        res.end();
                     }
                 });
             } else {
