@@ -24,6 +24,7 @@
             max-width: 500px;
             width: 100%;
             background: rgba(30, 30, 46, 0.8);
+            -webkit-backdrop-filter: blur(10px);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 40px;
@@ -112,6 +113,48 @@
         .file-types {
             color: #a0a0b0;
         }
+        .files-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .files-title {
+            color: #fff;
+            font-size: 18px;
+            margin-bottom: 15px;
+        }
+        .file-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .file-item {
+            background: #252538;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .file-item:hover {
+            background: #2a2a40;
+            transform: translateX(5px);
+        }
+        .file-item a {
+            color: #b0b0c0;
+            text-decoration: none;
+            flex: 1;
+        }
+        .file-item a:hover {
+            color: #6366f1;
+        }
+        .no-files {
+            color: #a0a0b0;
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -133,13 +176,41 @@
             <strong>Allowed file types:</strong>
             <span class="file-types">.jpg, .jpeg, .png, .gif, .pdf, .txt, .doc, .docx</span>
         </div>
+
+        <div class="files-section">
+            <h2 class="files-title">📂 Uploaded Files</h2>
+            <div class="file-list" id="fileList">
+                <div class="no-files">Loading...</div>
+            </div>
+        </div>
     </div>
 
     <script>
+        function loadFiles() {
+            fetch('/files')
+                .then(res => res.json())
+                .then(files => {
+                    const fileList = document.getElementById('fileList');
+                    if (files.length === 0) {
+                        fileList.innerHTML = '<div class="no-files">No files uploaded yet</div>';
+                    } else {
+                        fileList.innerHTML = files.map(file => 
+                            `<div class="file-item"><a href="/uploads/${encodeURIComponent(file)}" target="_blank">${file}</a></div>`
+                        ).join('');
+                    }
+                })
+                .catch(() => {
+                    document.getElementById('fileList').innerHTML = '<div class="no-files">Error loading files</div>';
+                });
+        }
+
+        loadFiles();
+
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.get('success') === 'true') {
             document.getElementById('subtitle').textContent = '✅ File uploaded successfully!';
             document.getElementById('subtitle').style.color = '#6366f1';
+            loadFiles();
             setTimeout(() => {
                 window.history.replaceState({}, '', '/');
                 document.getElementById('subtitle').textContent = 'Upload your files securely';

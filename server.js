@@ -64,6 +64,30 @@ const server = http.createServer((req, res) => {
                 res.end('<h1>No file selected</h1><a href="/">Go back</a>');
             }
         });
+    } else if (req.method === 'GET' && req.url === '/files') {
+        fs.readdir(UPLOAD_DIR, (err, files) => {
+            if (err) {
+                res.writeHead(500, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ error: 'Unable to read files' }));
+            } else {
+                const fileList = files.filter(f => f !== '.gitkeep');
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify(fileList));
+            }
+        });
+    } else if (req.method === 'GET' && req.url.startsWith('/uploads/')) {
+        const fileName = decodeURIComponent(req.url.replace('/uploads/', ''));
+        const filePath = path.join(UPLOAD_DIR, fileName);
+        
+        fs.readFile(filePath, (err, content) => {
+            if (err) {
+                res.writeHead(404, { 'Content-Type': 'text/html' });
+                res.end('<h1>File not found</h1>');
+            } else {
+                res.writeHead(200, { 'Content-Type': mime.lookup(filePath) || 'application/octet-stream' });
+                res.end(content);
+            }
+        });
     } else {
         const url = req.url.split('?')[0];
         let filePath = path.join(__dirname, 'public', url === '/' ? 'index.html' : url);
