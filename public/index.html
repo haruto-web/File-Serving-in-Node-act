@@ -5,25 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Node.js File Server</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
-        h1 { color: #333; }
-        form { background: #f4f4f4; padding: 20px; border-radius: 8px; }
-        input[type="file"] { margin: 10px 0; }
-        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .info { margin-top: 20px; padding: 10px; background: #e7f3ff; border-left: 4px solid #007bff; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e1e2e 0%, #2d2d44 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(30, 30, 46, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        h1 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .subtitle {
+            text-align: center;
+            color: #a0a0b0;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .upload-area {
+            background: #252538;
+            border: 2px dashed #4a4a6a;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .upload-area:hover {
+            border-color: #6366f1;
+            background: #2a2a40;
+        }
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        input[type="file"] {
+            display: none;
+        }
+        .file-label {
+            color: #b0b0c0;
+            font-size: 16px;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .file-name {
+            color: #6366f1;
+            font-size: 14px;
+            margin-top: 10px;
+            min-height: 20px;
+        }
+        button {
+            width: 100%;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .info {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        .info strong {
+            color: #fff;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .file-types {
+            color: #a0a0b0;
+        }
     </style>
 </head>
 <body>
-    <h1>Welcome to the Node.js File Server</h1>
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <h2>Upload a File</h2>
-        <input type="file" name="file" required>
-        <br>
-        <button type="submit">Upload</button>
-    </form>
-    <div class="info">
-        <strong>Allowed file types:</strong> .jpg, .jpeg, .png, .gif, .pdf, .txt, .doc, .docx
+    <div class="container">
+        <h1>📁 File Server</h1>
+        <p class="subtitle">Upload your files securely</p>
+        
+        <form action="/upload" method="POST" enctype="multipart/form-data" id="uploadForm">
+            <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">☁️</div>
+                <label class="file-label">Click to select a file</label>
+                <input type="file" name="file" id="fileInput" required>
+                <div class="file-name" id="fileName"></div>
+            </div>
+            <button type="submit">Upload File</button>
+        </form>
+        
+        <div class="info">
+            <strong>Allowed file types:</strong>
+            <span class="file-types">.jpg, .jpeg, .png, .gif, .pdf, .txt, .doc, .docx</span>
+        </div>
     </div>
+
+    <script>
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name || '';
+            document.getElementById('fileName').textContent = fileName ? `Selected: ${fileName}` : '';
+        });
+    </script>
 </body>
 </html>

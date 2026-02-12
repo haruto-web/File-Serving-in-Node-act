@@ -30,7 +30,8 @@ const server = http.createServer((req, res) => {
             
             for (let part of parts) {
                 if (part.includes('filename=')) {
-                    const nameMatch = part.match(/filename="(.+?)"/);                    if (nameMatch) {
+                    const nameMatch = part.match(/filename="(.+?)"/);
+                    if (nameMatch) {
                         fileName = nameMatch[1];
                         const ext = path.extname(fileName).toLowerCase();
                         
