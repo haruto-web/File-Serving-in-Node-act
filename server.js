@@ -65,7 +65,8 @@ const server = http.createServer((req, res) => {
             }
         });
     } else {
-        let filePath = path.join(__dirname, 'public', req.url === '/' ? 'index.html' : req.url);
+        const url = req.url.split('?')[0];
+        let filePath = path.join(__dirname, 'public', url === '/' ? 'index.html' : url);
 
         fs.readFile(filePath, (err, content) => {
             if (err) {
