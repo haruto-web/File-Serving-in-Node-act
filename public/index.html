@@ -4,8 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Node.js File Server</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        h1 { color: #333; }
+        form { background: #f4f4f4; padding: 20px; border-radius: 8px; }
+        input[type="file"] { margin: 10px 0; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .info { margin-top: 20px; padding: 10px; background: #e7f3ff; border-left: 4px solid #007bff; }
+    </style>
 </head>
 <body>
     <h1>Welcome to the Node.js File Server</h1>
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <h2>Upload a File</h2>
+        <input type="file" name="file" required>
+        <br>
+        <button type="submit">Upload</button>
+    </form>
+    <div class="info">
+        <strong>Allowed file types:</strong> .jpg, .jpeg, .png, .gif, .pdf, .txt, .doc, .docx
+    </div>
 </body>
 </html>
